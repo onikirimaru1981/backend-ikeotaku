@@ -1,92 +1,86 @@
 const usersModels = require("../models/usersModels");
-const {
-    query
-} = require("express");
-const isProduction = process.env.PRODUCTION === 'true' ? true : false;
-
+const { query } = require("express");
+const isProduction = process.env.PRODUCTION === "true" ? true : false;
 
 module.exports = {
-    getAllUsuarios: async function (req, res) {
+  getAllUsuarios: async function (req, res) {
+    //obtener usuarios
+    if (isProduction) {
+      res.status(200).json({
+        message: "Listado de todos los usuarios",
+      });
+      return;
+    }
 
+    const usersList = await usersModels.getAllUsuarios();
 
-        //obtener usuarios
-        if (isProduction) {
-            res.status(200).json({
-                message: 'Listado de todos los usuarios'
-            });
-            return;
-        }
+    res.json(usersList);
+  },
 
-        const usersList = await usersModels.getAllUsuarios();
+  getUsuario: async function (req, res) {
+    //obtener un usuario
+    if (isProduction) {
+      res.status(200).json({
+        message: "Dato de un usuario",
+      });
+      return;
+    }
+    const userId = req.params.id;
+    const queryResult = await usersModels.getUsuario(userId);
 
-        res.json(usersList);
-    },
+    res.status(200).json(queryResult[0]);
+  },
 
-    getUsuario: async function (req, res) {
-        //obtener un usuario
-        if (isProduction) {
-            res.status(200).json({
-                message: 'Dato de un usuario'
-            });
-            return;
-        };
-        const userId = req.params.id;
-        const queryResult = await usersModels.getUsuario(userId)
+  addUser: async function (req, res) {
+    //añadir usuario
+    if (isProduction) {
+      res.status(200).json({
+        message: "Usuario añadido",
+      });
+      return;
+    }
 
-        res.status(200).json(queryResult[0]);
-    },
+    const usuario = req.body;
+    const queryResult = await usersModels.addUser(usuario);
 
-    addUser: async function (req, res) {
-        //añadir usuario
-        if (isProduction) {
-            res.status(200).json({
-                message: 'Usuario añadido'
-            });
-            return;
-        };
+    res.status(200).json({
+      message: "Usuario añadido correctamente,yepaaaa!",
+      userId: queryResult.insertId,
+    });
+  },
 
-        const usuario = req.body;
-        const queryResult = await usersModels.addUser(usuario);
+  updateUser: async function (req, res) {
+    //actualizar usuario
+    if (isProduction) {
+      res.status(200).json({
+        message: "Usuario actualizado",
+      });
+      return;
+    }
+    const usuario = req.body;
+    const userId = req.params.id;
+    const queryResult = await usersModels.updateUser(userId, usuario);
 
-        res.status(200).json({
-            message: 'Usuario añadido correctamente,yepaaaa!',
-            userId: queryResult.insertId
-        });
-    },
+    res.status(200).json({
+      message: "Usuario actualizado correctamente,tururu!",
+      userId: queryResult.insertId,
+    });
+  },
 
-    updateUser: async function (req, res) {
-        //actualizar usuario
-        if (isProduction) {
-            res.status(200).json({
-                message: 'Usuario actualizado'
-            });
-            return;
-        };
-        const usuario = req.body;
-        const userId = req.params.id;
-        const queryResult = await usersModels.updateUser(userId, usuario);
+  deleteUser: async function (req, res) {
+    //borrar usuario
+    if (isProduction) {
+      res.status(200).json({
+        message: "Usuario borrado",
+      });
+      return;
+    }
 
-        res.status(200).json({
-            message: 'Usuario actualizado correctamente,tururu!',
-            userId: queryResult.insertId
-        });
-    },
+    const userId = req.params.id;
+    const queryResult = await usersModels.deleteUser(userId);
 
-    deleteUser: async function (req, res) {
-        //borrar usuario
-        if (isProduction) {
-            res.status(200).json({
-                message: 'Usuario borrado'
-            });
-            return;
-        };
-
-        const userId = req.params.id;
-        const queryResult = await usersModels.deleteUser(userId);
-
-        res.status(200).json({
-            message: 'Usuario borrado,ups!',
-
-        });
-    },
+    res.status(200).json({
+      message: "Usuario borrado,ups!",
+    });
+  },
 };

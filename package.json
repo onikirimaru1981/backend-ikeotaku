@@ -17,7 +17,6 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.10.3",
     "mysql": "^2.18.1",
-    "nodemon": "^2.0.4",
     "sql-template": "^1.2.0",
     "sql-template-strings": "^2.2.2",
     "supervisor": "^0.12.0"
