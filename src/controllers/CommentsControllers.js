@@ -15,7 +15,7 @@ const commentsController = {
     createComment: function (req, res) {
         const comment = new Comment();
 
-        return res.
+
 
     }
 

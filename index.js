@@ -22,7 +22,7 @@ app.use(express.urlencoded({
 }));
 
 //Routes
-// app.use("/user", usersRoutes);
+app.use("/user", usersRoutes);
 app.use("/comment", commenstRoutes);
 app.use("/favorite", favoritesRoutes);
 app.use("/score", scoresRoutes);
