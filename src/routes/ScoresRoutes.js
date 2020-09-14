@@ -1,12 +1,14 @@
 const express = require('express');
+const scoresControllers = require('../controllers/ScoresControllers');
 const router = express.Router();
-const usersControllers = require('../controllers/UsersControllers');
+
 
 //Routes
-// router.get('/', usersControllers.getScores);
-// router.get('/:userId', usersControllers.getScore);
-// router.post('/', usersControllers.addScore);
-// router.put('/:userId', usersControllers.updateScore);
+
+
+router.post('/addScore', scoresControllers.addScore);
+router.put('/updateScore/:scoreId', scoresControllers.updateScore);
+router.delete('/scoreDelete/:scoreId', scoresControllers.deleteScore);
 
 
 

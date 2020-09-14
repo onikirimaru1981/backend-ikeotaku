@@ -6,7 +6,7 @@ const commenstRoutes = require("./src/routes/CommentsRoutes");
 const favoritesRoutes = require("./src/routes/FavoritesRoutes");
 const scoresRoutes = require("./src/routes/ScoresRoutes");
 const animesRoutes = require("./src/routes/AnimesRotes");
-const mangasRoutes = require("./src/routes/mangasRoutes");
+const mangasRoutes = require("./src/routes/MangasRoutes");
 const cors = require("cors");
 
 

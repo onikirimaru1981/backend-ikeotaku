@@ -19,7 +19,7 @@ const usersController = {
       if (err) return res.status(500).send({ message: "Error al mostrar lista de usuarios" });
       return res.status(200).json({
         message: "Busqueda de usuarios realizada correctamente",
-        users,
+        users
       });
     });
   },
@@ -45,13 +45,17 @@ const usersController = {
     const userInfo = req.body;
     const user = new User();
 
+
     user.user = userInfo.user;
     user.email = userInfo.email;
     user.age = userInfo.age;
     user.city = userInfo.city;
     user.favorites = [];
     user.comments = [];
+    user.scores = [];
     user.password = await utils.generatePassword(userInfo.password);
+
+
 
 
     user.save((err, userSave) => {
@@ -64,10 +68,23 @@ const usersController = {
           message: "No se ha podido guardar datos de usuario.",
         });
 
+      // user.find((userSave) => {
+
+      //   if (userSave === userInfo)
+      //     return res.status(400).send({ message: "Error,el usuario ya existe" });
+
+      // });
+      //  if (userSave === userInfo)
+      //   return res.status(400).send({
+      //     message: "Error,el usuario ya existe"
+      //   });
+      // console.log("aqui")
+
       return res.status(200).send({
         message: "Usuario creado y guardado correctamente",
-        user: userSave,
+        user: userSave
       });
+
     });
   },
 
@@ -93,6 +110,7 @@ const usersController = {
 
   deleteUser: async function (req, res) {
     const userId = req.params.userId;
+
     await User.findByIdAndDelete(userId, (err, userDelete) => {
       if (err)
         return res.status(500).send({
@@ -104,7 +122,7 @@ const usersController = {
         });
       return res.status(200).send({
         message: "Usuario borrado correctamente",
-        user: userDelete,
+        user: userDelete
 
       });
     });
