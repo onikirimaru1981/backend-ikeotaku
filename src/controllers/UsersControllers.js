@@ -1,6 +1,6 @@
-require("dotenv").config();
 const mongoose = require("mongoose");
-// const jtw = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const utils = require("../utils/index");
 const User = require("../models/UsersModels");
 
@@ -39,8 +39,7 @@ const usersController = {
     })
     // const searchUser = await User.findById(userId).populate("comments"); //tener en cuenta para despues
   },
-  //Preguntar  a victor como hacer para que no me puedan crear el mismo usuario dos vecss
-  //Preguntar como implementar la autentificacion,porque ni puta idea de como hacerlo
+
   createUser: async function (req, res) {
     const userInfo = req.body;
     const user = new User();
@@ -55,31 +54,19 @@ const usersController = {
     user.scores = [];
     user.password = await utils.generatePassword(userInfo.password);
 
-
-
+    const checkIfAlreadyExists = await User.find({ user: userInfo.user });
+    if (checkIfAlreadyExists[0]) {
+      res.status(500).json({
+        message: "Nombre de usuario no disponible."
+      });
+      return;
+    }
 
     user.save((err, userSave) => {
       if (err)
         return res.status(500).send({
           message: "Error al crear usuario,intentelo de nuevo.",
         });
-      if (!userSave)
-        return res.status(404).send({
-          message: "No se ha podido guardar datos de usuario.",
-        });
-
-      // user.find((userSave) => {
-
-      //   if (userSave === userInfo)
-      //     return res.status(400).send({ message: "Error,el usuario ya existe" });
-
-      // });
-      //  if (userSave === userInfo)
-      //   return res.status(400).send({
-      //     message: "Error,el usuario ya existe"
-      //   });
-      // console.log("aqui")
-
       return res.status(200).send({
         message: "Usuario creado y guardado correctamente",
         user: userSave
@@ -96,8 +83,6 @@ const usersController = {
     User.findByIdAndUpdate(userId, update, { new: true }, (err, userUpdate) => {
 
       if (err) return res.status(500).send({ message: "Error al actualizar" });
-
-      if (!userUpdate) return res.status(404).send({ message: "No existe usuario para actualizar" });
 
       return res.status(200).send({
         message: "Usuario actualizado correctamente",
@@ -116,10 +101,7 @@ const usersController = {
         return res.status(500).send({
           message: "No se ha podido realizar la eliminacion del usuario",
         });
-      if (!userDelete)
-        return res.status(404).send({
-          message: "No se ha podido eliminar el usuario,no existe o no se ha especificado correctamente ",
-        });
+
       return res.status(200).send({
         message: "Usuario borrado correctamente",
         user: userDelete
@@ -127,6 +109,25 @@ const usersController = {
       });
     });
   },
+  login: async function (req, res) {
+    const { user, password } = req.body;
+
+    const storedUserInfo = await User.find({ user });
+    if (!storedUserInfo[0]) {
+      res.status(401).send('No estás autorizado. Usuario o contraseñà incorrectos.');
+    }
+
+    const checkUserPassword = await bcrypt.compare(password, storedUserInfo[0].password);
+    if (!checkUserPassword) {
+      res.status(401).send('No estás autorizado. Usuario o contraseñà incorrectos.');
+    }
+
+    const token = await jwt.sign({ user: storedUserInfo[0].user }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' });
+    res.status(200).json({
+      message: 'Login correcto',
+      token
+    });
+  }
 };
 
 module.exports = usersController;

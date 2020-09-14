@@ -40,6 +40,10 @@ const scoresControllers = {
         const scoreId = req.params.scoreId;
         const update = req.body;
 
+        const dataToUpdate = {
+
+        };
+
         Score.findByIdAndUpdate(scoreId, update, { new: true }, (err, scoreUpdate) => {
 
             if (err) return res.status(500).send({ message: "Error al actualizar" });

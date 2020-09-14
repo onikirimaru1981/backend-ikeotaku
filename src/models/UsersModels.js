@@ -6,21 +6,15 @@ const UserSchema = new Schema({
     email: String,
     password: String,
     age: Number,
-    city: String
+    city: String,
     // favorites: [{
     //     type: Schema.Types.ObjectId,
     //     ref: 'Favorites'
     // }],
-    // comments: [{
-    //     type: Schema.Types.ObjectId,
-    //     ref: 'Comment'
-    // }],
-    // score: [{
-    //     type: Schema.Types.ObjectId,
-    //     ref: 'Score'
-    // }]
-
-
+    comments: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Comment'
+    }]
 });
 
 module.exports = mongoose.model('User', UserSchema);

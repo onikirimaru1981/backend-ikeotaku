@@ -1,6 +1,7 @@
 require("dotenv").config();
 const mongoose = require('mongoose')
 const Comment = require("../models/CommentsModels");
+// const User = require("../models/UsersModel");
 
 
 mongoose.connect(process.env.SERVER, {
@@ -51,10 +52,10 @@ const commentsController = {
                 return res.status(500).send({
                     message: "Error al crear nuevo comentario,intentelo de nuevo mas tarde.",
                 });
-            if (!commentSave)
-                return res.status(404).send({
-                    message: "No se ha podido guardar el comentario.",
-                });
+
+            // const dataToUpdate = { $push: { comments: [commentSave._id] } };
+
+            User.findByIdAndUpdate(userId, dataToUpdate); // Necesitamos autenticación para actualizar el usuario
             return res.status(200).send({
                 message: "Comentario creado y guardado correctamente",
                 comment: commentSave
