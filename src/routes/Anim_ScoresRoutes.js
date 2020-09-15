@@ -5,7 +5,7 @@ const anim_ScoresControllers = require('../controllers/anim_ScoresController');
 
 // //Routes
 
-router.post('/addScore', anim_ScoresControllers.addScoreAnime);
+router.post("/:animeId/score/:userId',anim_ScoresControllers.addScoreAnime");
 
 
 

@@ -37,9 +37,9 @@ app.use(express.urlencoded({
 app.use("/api/users", usersRoutes);
 app.use("/api/comments", commenstRoutes);
 app.use("/api/favorites", favoritesRoutes);
-app.use("/api/animes", animesRoutes);
+app.use("/api/anime", animesRoutes);
 app.use("/api/mangas", mangasRoutes);
-app.use("/api/anim_Scores", anim_ScoresRoutes);
+app.use("/api/animes", anim_ScoresRoutes);
 app.use("/api/mang_Scores", mang_ScoresRoutes);
 // app.get('/', (req, res) => {
 //     res.status(200).send('<h1>Bienvenido a ikeotaku</h1>');
