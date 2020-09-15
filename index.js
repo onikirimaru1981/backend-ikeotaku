@@ -1,13 +1,25 @@
 //require modules
 require("dotenv").config();
 const express = require("express");
+const cors = require("cors");
+const mongoose = require('mongoose')
 const usersRoutes = require("./src/routes/UsersRoutes");
 const commenstRoutes = require("./src/routes/CommentsRoutes");
 const favoritesRoutes = require("./src/routes/FavoritesRoutes");
-const scoresRoutes = require("./src/routes/ScoresRoutes");
-const animesRoutes = require("./src/routes/AnimesRotes");
+const animesRoutes = require("./src/routes/AnimesRoutes");
 const mangasRoutes = require("./src/routes/MangasRoutes");
-const cors = require("cors");
+const anim_ScoresRoutes = require("./src/routes/MangasRoutes");
+const mang_ScoresRoutes = require("./src/routes/MangasRoutes");
+
+
+
+//Connect DDBB
+
+mongoose.connect(process.env.SERVER, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  useFindAndModify: false,
+});
 
 
 //create app
@@ -22,12 +34,13 @@ app.use(express.urlencoded({
 }));
 
 //Routes
-app.use("/user", usersRoutes);
-app.use("/comment", commenstRoutes);
-app.use("/favorite", favoritesRoutes);
-app.use("/score", scoresRoutes);
-app.use("/animes", animesRoutes);
-app.use("/mangas", mangasRoutes);
+app.use("/api/users", usersRoutes);
+app.use("/api/comments", commenstRoutes);
+app.use("/api/favorites", favoritesRoutes);
+app.use("/api/animes", animesRoutes);
+app.use("/api/mangas", mangasRoutes);
+app.use("/api/anim_Scores", anim_ScoresRoutes);
+app.use("/api/mang_Scores", mang_ScoresRoutes);
 // app.get('/', (req, res) => {
 //     res.status(200).send('<h1>Bienvenido a ikeotaku</h1>');
 // });

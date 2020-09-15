@@ -1,16 +1,9 @@
 require("dotenv").config();
 const mongoose = require('mongoose')
-const Comment = require("../models/CommentsModels");
-// const User = require("../models/UsersModel");
+const Comment = require("../models/CommentsModel");
 
 
-mongoose.connect(process.env.SERVER, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useFindAndModify: false,
-});
-
-const commentsController = {
+const commentsControllers = {
     //metodos
 
     getAllComments: async function (req, res) {
@@ -38,7 +31,7 @@ const commentsController = {
             });
 
         })
-        // const searchUser = await User.findById(userId).populate("comments"); //tener en cuenta para despues
+
     },
 
     createComment: function (req, res) {
@@ -105,4 +98,4 @@ const commentsController = {
 };
 
 
-module.exports = commentsController;
+module.exports = commentsControllers;

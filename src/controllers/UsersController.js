@@ -2,16 +2,12 @@ const mongoose = require("mongoose");
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const utils = require("../utils/index");
-const User = require("../models/UsersModels");
+const User = require("../models/UsersModel");
 
 
-mongoose.connect(process.env.SERVER, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-  useFindAndModify: false,
-});
 
-const usersController = {
+
+const usersControllers = {
   //Metodos
   getAllUsers: async function (req, res) {
     const usersList = await User.find((err, users) => {
@@ -43,18 +39,22 @@ const usersController = {
   createUser: async function (req, res) {
     const userInfo = req.body;
     const user = new User();
+    const checkIfAlreadyExists = await User.find({ user: userInfo.user });
+    const sequence = await User.find().countDocuments() + 1;
 
 
+    user._id = sequence
     user.user = userInfo.user;
     user.email = userInfo.email;
+    user.password = await utils.generatePassword(userInfo.password);
     user.age = userInfo.age;
     user.city = userInfo.city;
     user.favorites = [];
     user.comments = [];
     user.scores = [];
-    user.password = await utils.generatePassword(userInfo.password);
 
-    const checkIfAlreadyExists = await User.find({ user: userInfo.user });
+
+
     if (checkIfAlreadyExists[0]) {
       res.status(500).json({
         message: "Nombre de usuario no disponible."
@@ -110,6 +110,8 @@ const usersController = {
     });
   },
   login: async function (req, res) {
+
+
     const { user, password } = req.body;
 
     const storedUserInfo = await User.find({ user });
@@ -130,4 +132,4 @@ const usersController = {
   }
 };
 
-module.exports = usersController;
+module.exports = usersControllers;

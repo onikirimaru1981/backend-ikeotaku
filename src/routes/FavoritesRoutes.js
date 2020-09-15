@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const favoritesControllers = require('../controllers/favoritesControllers');
+const favoritesControllers = require('../controllers/FavoritesController');
 
 
 //Routes

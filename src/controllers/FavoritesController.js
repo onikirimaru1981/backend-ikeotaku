@@ -1,13 +1,9 @@
 const mongoose = require('mongoose')
-const Favorite = require("../models/FavoritesModels");
+const Favorite = require("../models/FavoritesModel");
 
-mongoose.connect(process.env.SERVER, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useFindAndModify: false,
-});
 
-const favoritesController = {
+
+const favoritesControllers = {
     //metodos
 
     getAllFavorites: async function (req, res) {
@@ -89,4 +85,4 @@ const favoritesController = {
 
 
 
-module.exports = favoritesController
+module.exports = favoritesControllers
