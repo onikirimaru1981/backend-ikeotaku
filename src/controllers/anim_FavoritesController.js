@@ -1,21 +1,22 @@
 const mongoose = require("mongoose");
 const jwt = require('jsonwebtoken');
-const AnimScore = require('../models/anim_ScoresModel');
+const AnimFavorite = require('../models/anim_FavoritesModel');
 
 
-const animScoresControllers = {
+const animFavoriteControllers = {
 
-    addScoreAnime: async function (req, res) {
+    deleteFavoriteAnime: async (req, res) => {
+        // TODO: Implementar metodo.
+    },
+    addFavoriteAnime: async function (req, res) {
 
-        const scoreAnimInfo = req.body;
-        const animScore = new AnimScore();
+        const AnimFavoriteInfo = req.body;
+        const animFavorite = new AnimFavorite();
 
+        animFavorite.user_id = req.params.userId
+        animFavorite.anime_id = req.params.animeId
 
-        animScore.score = scoreAnimInfo.score;
-        animScore.user_id = req.params.userId
-        animScore.anime_id = req.params.animeId
-
-        AnimScore.findOneAndUpdate({ user_id: req.params.userId, anime_id: req.params.animeId },
+        AnimFavorite.findOneAndUpdate({ user_id: req.params.userId, anime_id: req.params.animeId },
             animScore,
             { upsert: true }, (err, scoreSave) => {
                 console.log(scoreSave)

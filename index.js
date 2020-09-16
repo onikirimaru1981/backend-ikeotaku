@@ -4,12 +4,9 @@ const express = require("express");
 const cors = require("cors");
 const mongoose = require('mongoose')
 const usersRoutes = require("./src/routes/UsersRoutes");
-const commenstRoutes = require("./src/routes/CommentsRoutes");
-const favoritesRoutes = require("./src/routes/FavoritesRoutes");
 const animesRoutes = require("./src/routes/AnimesRoutes");
 const mangasRoutes = require("./src/routes/MangasRoutes");
-const anim_ScoresRoutes = require("./src/routes/MangasRoutes");
-const mang_ScoresRoutes = require("./src/routes/MangasRoutes");
+
 
 
 
@@ -33,14 +30,13 @@ app.use(express.urlencoded({
   extended: true
 }));
 
+
+
 //Routes
 app.use("/api/users", usersRoutes);
-app.use("/api/comments", commenstRoutes);
-app.use("/api/favorites", favoritesRoutes);
-app.use("/api/anime", animesRoutes);
 app.use("/api/mangas", mangasRoutes);
-app.use("/api/animes", anim_ScoresRoutes);
-app.use("/api/mang_Scores", mang_ScoresRoutes);
+app.use("/api/animes", animesRoutes);
+
 // app.get('/', (req, res) => {
 //     res.status(200).send('<h1>Bienvenido a ikeotaku</h1>');
 // });

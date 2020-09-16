@@ -4,13 +4,24 @@ const Schema = mongoose.Schema;
 const AnimesSchema = new Schema({
 
     _id: Number,
-    title: String,
-    type: String,
-    episodes: Number,//consultar que datos tendra mi model de mangas en funcion al json que tengo
+    titles: { en: String, en_jp: String, ja_jp: String },
+    synopsis: String,
+    episodeCount: Number,
+    episodeLength: Number,
+    favoritesCount: Number,
+    ageRating: String,
+    ageRatingGuide: String,
+    subtype: String,
     status: String,
-    score: Number
+    posterImage: {
+        tiny: String,
+        medium: String,
+    },
+    youtubeVideoId: String,
+    showType: String,
+    score: Number,
 });
 
 
 
-module.exports = mongoose.model('Animes', AnimesSchema);
+module.exports = mongoose.model('Anime', AnimesSchema);
