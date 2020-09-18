@@ -40,10 +40,14 @@ const usersControllers = {
     const userInfo = req.body;
     const user = new User();
     const checkIfAlreadyExists = await User.find({ user: userInfo.user });
-    const sequence = await User.find().countDocuments() + 1;
+    const sequence = await User.find().sort({ '_id': -1 }).limit(1)
+    //sequence = busca todos los documentos, los ordena de mayor a menor y devuelve el 
+    //primero de ellos. 
+
+    if (sequence.length === 0) user._id = 1;
+    else { user._id = parseInt(sequence[0]._id) + 1; };
 
 
-    user._id = sequence
     user.user = userInfo.user;
     user.email = userInfo.email;
     user.password = await utils.generatePassword(userInfo.password);
@@ -63,6 +67,7 @@ const usersControllers = {
     }
 
     user.save((err, userSave) => {
+
       if (err)
         return res.status(500).send({
           message: "Error al crear usuario,intentelo de nuevo.",
@@ -93,22 +98,7 @@ const usersControllers = {
   },
 
 
-  deleteUser: async function (req, res) {
-    const userId = req.params.userId;
 
-    await User.findByIdAndDelete(userId, (err, userDelete) => {
-      if (err)
-        return res.status(500).send({
-          message: "No se ha podido realizar la eliminacion del usuario",
-        });
-
-      return res.status(200).send({
-        message: "Usuario borrado correctamente",
-        user: userDelete
-
-      });
-    });
-  },
   login: async function (req, res) {
 
 
@@ -130,6 +120,8 @@ const usersControllers = {
       token
     });
   }
+
+  //añadir en futurro metodo sofdelete
 };
 
 module.exports = usersControllers;

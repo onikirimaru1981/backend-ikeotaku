@@ -25,9 +25,9 @@ const saveDocuments = (data) => {
         };
         anime.youtubeVideoId = anime_data.attributes.youtubeVideoId;
         anime.showType = anime_data.attributes.showType;
-        anime.synopsis = anime_data.synopsis;
-        anime.episodeCount = anime_data.synopsis;
-        anime.episodeLength = anime_data.synopsis;
+        anime.synopsis = anime_data.attributes.synopsis;
+        anime.episodeCount = anime_data.attributes.episodeCount
+        anime.episodeLength = anime_data.attributes.episodeLength;
 
         try {
             anime.save((err, animeSave) => {

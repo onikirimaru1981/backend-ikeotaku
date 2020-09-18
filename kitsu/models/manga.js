@@ -11,7 +11,7 @@ const MangaSchema = new Schema({
     ageRatingGuide: String,
     status: String,
     posterImage: {
-        tiny: {type: String, required: false},
+        tiny: { type: String, required: false },
         medium: String,
     },
     chapterCount: Number,

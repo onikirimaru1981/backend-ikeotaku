@@ -2,16 +2,45 @@ const mongoose = require("mongoose");
 const jwt = require('jsonwebtoken');
 const Anime = require('../models/AnimesModel');
 
-//Hacer lo mismo para mangas(modificar model,controler,y rouetes igual que el de animes)
+//Hacer lo mismo para mangas(modificar model,controler,y routes igual que el de animes)
 const animesControllers = {
 
-    getAllAnimes: async function (req, res) { },
+    getAllAnimes: async function (req, res) {
+
+        try {
+
+            const limit = parseInt(req.query.limit);
+            const page = parseInt(req.query.page) - 1;
+            const skip = page * limit;
+            const query_sort = req.query.sort;
+            //favorites
+            //score
+            //title
+            const query_type_sort = req.query.type_sort
+            let sort = {}
+
+            if (query_sort === 'favorites') sort = { favoritesCount: query_type_sort }
+            if (query_sort === 'score') sort = { score: query_type_sort }
+
+            const anime = await Anime.find({}).limit(12).skip(skip).sort(sort);
+
+            if (anime.length === 0) res.status(404).send("Anime no encontrado");
+            return res.status(200).send(anime);
+        } catch (e) {
+            return res.status(500).send("Se ha producido un error interno: " + e);
+        }
+    },
     get: async (req, res) => {
 
-        const id = req.params.animeId
-        const anime = await Anime.find({ _id: id });
+        try {
+            const id = req.params.animeId
+            const anime = await Anime.find({ _id: id });
 
-        return res.status(200).send(anime);
+            if (anime.length === 0) res.status(404).send("Anime no encontrado");
+            return res.status(200).send(anime);
+        } catch (e) {
+            return res.status(500).send("Se ha producido un error interno: " + e);
+        }
 
     },
     getAnimeComments: async function (req, res) { },

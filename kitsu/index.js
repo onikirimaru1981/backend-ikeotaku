@@ -1,7 +1,7 @@
 require("dotenv").config();
 const mongoose = require('mongoose')
-const animes = require('./domain/animes')
-const mangas = require('./domain/mangas')
+const animes = require('./controllers/animes')
+// const mangas = require('./domain/mangas')
 
 mongoose.connect(process.env.SERVER, {
     useNewUrlParser: true,
