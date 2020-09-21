@@ -37,8 +37,8 @@ const mangasControllers = {
 
             if (manga.length === 0) res.status(404).send("Manga no encontrado");
             return res.status(200).send(manga);
-        } catch (e) {
-            return res.status(500).send("Se ha producido un error interno: " + e);
+        } catch (err) {
+            return res.status(500).send("Se ha producido un error interno: " + err);
         }
     },
     getMangaComments: async function (req, res) { },

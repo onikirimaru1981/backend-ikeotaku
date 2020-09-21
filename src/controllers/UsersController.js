@@ -12,7 +12,7 @@ const usersControllers = {
   getAllUsers: async function (req, res) {
     const usersList = await User.find((err, users) => {
 
-      if (err) return res.status(500).send({ message: "Error al mostrar lista de usuarios" });
+      if (err) return res.status(500).send({ message: "Error al mostrar lista de usuarios" + err });
       return res.status(200).json({
         message: "Busqueda de usuarios realizada correctamente",
         users
@@ -24,8 +24,8 @@ const usersControllers = {
     const userId = req.params.userId
     User.findById(userId, (err, user) => {
 
-      if (err) return res.status(500).send({ message: "Error al mostrar usaurio" });
-      if (!user) return res.status(404).send({ message: "El usuario no existe" });
+      if (err) return res.status(500).send({ message: "Error al mostrar usaurio" + err });
+      if (!user) return res.status(400).send({ message: "El usuario no existe" });
       return res.status(200).send({
         message: "Busqueda de usuario realizada correctamente",
         user: user
@@ -39,7 +39,7 @@ const usersControllers = {
   createUser: async function (req, res) {
     const userInfo = req.body;
     const user = new User();
-    const checkIfAlreadyExists = await User.find({ user: userInfo.user });
+    const checkIfAlreadyExists = await User.find({ email: userInfo.email });
     const sequence = await User.find().sort({ '_id': -1 }).limit(1)
     //sequence = busca todos los documentos, los ordena de mayor a menor y devuelve el 
     //primero de ellos. 
@@ -48,20 +48,27 @@ const usersControllers = {
     else { user._id = parseInt(sequence[0]._id) + 1; };
 
 
-    user.user = userInfo.user;
+    user.nickName = userInfo.nickName;
     user.email = userInfo.email;
     user.password = await utils.generatePassword(userInfo.password);
-    user.age = userInfo.age;
-    user.city = userInfo.city;
-    user.favorites = [];
-    user.comments = [];
-    user.scores = [];
+    user.gender = userInfo.gender
+    user.birthday = userInfo.birthday;
+    user.country = userInfo.country;
+    user.province = userInfo.province;
+    // user.favorites = [];
+    // user.comments = [];
+    // user.scores = [];
 
+    //Validar como obligatorios, age,password,nickanem,email, 
+    //Nickname existe
+    //age sea un numero
+    //email valido.
+    //recodar contraseña-futuro
 
 
     if (checkIfAlreadyExists[0]) {
-      res.status(500).json({
-        message: "Nombre de usuario no disponible."
+      res.status(400).json({
+        message: "Correo electronico ya registrado."
       });
       return;
     }
@@ -70,7 +77,7 @@ const usersControllers = {
 
       if (err)
         return res.status(500).send({
-          message: "Error al crear usuario,intentelo de nuevo.",
+          message: "Error al crear usuario,intentelo de nuevo." + err,
         });
       return res.status(200).send({
         message: "Usuario creado y guardado correctamente",
@@ -87,7 +94,7 @@ const usersControllers = {
     update.password = await utils.generatePassword(update.password)
     User.findByIdAndUpdate(userId, update, { new: true }, (err, userUpdate) => {
 
-      if (err) return res.status(500).send({ message: "Error al actualizar" });
+      if (err) return res.status(500).send({ message: "Error al actualizar" + err });
 
       return res.status(200).send({
         message: "Usuario actualizado correctamente",
@@ -97,31 +104,28 @@ const usersControllers = {
 
   },
 
-
-
   login: async function (req, res) {
 
+    const { email, password } = req.body;
 
-    const { user, password } = req.body;
-
-    const storedUserInfo = await User.find({ user });
+    const storedUserInfo = await User.find({ email });
     if (!storedUserInfo[0]) {
-      res.status(401).send('No estás autorizado. Usuario o contraseñà incorrectos.');
+      res.status(401).send('No estás autorizado. Email o contraseña incorrectos.');
     }
 
     const checkUserPassword = await bcrypt.compare(password, storedUserInfo[0].password);
     if (!checkUserPassword) {
-      res.status(401).send('No estás autorizado. Usuario o contraseñà incorrectos.');
+      res.status(401).send('No estás autorizado. Email o contraseña incorrectos.');
     }
 
-    const token = await jwt.sign({ user: storedUserInfo[0].user }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1h' });
+    const token = await jwt.sign({ storeUserInfo: storedUserInfo[0] }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '4h' });
     res.status(200).json({
       message: 'Login correcto',
       token
     });
   }
 
-  //añadir en futurro metodo sofdelete
+  //añadir en futuro metodo sofdelete
 };
 
 module.exports = usersControllers;

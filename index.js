@@ -30,6 +30,14 @@ app.use(express.urlencoded({
   extended: true
 }));
 
+// middleware autorizacion next()-- > middleware authorization token nodejs
+app.use((req, res, next) => {
+
+
+  console.log("Soy el middleware de autorizacion, autorizame los huevos.")
+  next();
+
+})
 
 
 //Routes

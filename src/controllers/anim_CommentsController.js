@@ -21,7 +21,7 @@ const animCommentsControllers = {
                 if (err) {
 
                     return res.status(500).send({
-                        message: "Error al añadir comentario..",
+                        message: "Error al añadir comentario.." + err,
                     });
                 }
                 return res.status(200).send({

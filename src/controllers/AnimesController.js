@@ -22,12 +22,12 @@ const animesControllers = {
             if (query_sort === 'favorites') sort = { favoritesCount: query_type_sort }
             if (query_sort === 'score') sort = { score: query_type_sort }
 
-            const anime = await Anime.find({}).limit(12).skip(skip).sort(sort);
+            const anime = await Anime.find({}).limit(6).skip(skip).sort(sort);
 
             if (anime.length === 0) res.status(404).send("Anime no encontrado");
             return res.status(200).send(anime);
-        } catch (e) {
-            return res.status(500).send("Se ha producido un error interno: " + e);
+        } catch (err) {
+            return res.status(500).send("Se ha producido un error interno: " + err);
         }
     },
     get: async (req, res) => {
@@ -38,8 +38,8 @@ const animesControllers = {
 
             if (anime.length === 0) res.status(404).send("Anime no encontrado");
             return res.status(200).send(anime);
-        } catch (e) {
-            return res.status(500).send("Se ha producido un error interno: " + e);
+        } catch (err) {
+            return res.status(500).send("Se ha producido un error interno: " + err);
         }
 
     },
