@@ -45,6 +45,10 @@ app.use("/api/users", usersRoutes);
 app.use("/api/mangas", mangasRoutes);
 app.use("/api/animes", animesRoutes);
 
+app.get('/', (req, res) => {
+  res.send('todo ok')
+});
+
 // app.get('/', (req, res) => {
 //     res.status(200).send('<h1>Bienvenido a ikeotaku</h1>');
 // });
